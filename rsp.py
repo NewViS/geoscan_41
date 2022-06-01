@@ -4,12 +4,12 @@ from math import *
 import time
 import tracemalloc
 
-
+start=time.perf_counter()
 tracemalloc.start()
 
 #settings
 seed = 0.5
-minrst = 0
+sumr = 0
 
 # Using the above nested radical formula for g=phi_d
 # or you could just hard-code it.
@@ -25,7 +25,7 @@ def phi(d):
 d=2
 
 def tckRsp(n, x1, x2, y1, y2):
-    etal = sqrt((x2 - x1)**2 + (y2 - y1)**2) / n**2
+    etal = sqrt((x2 - x1)**2 + (y2 - y1)**2) / n
     g = phi(d)
     alpha = np.zeros(d)
     for j in range(d):
@@ -50,7 +50,7 @@ def kulon2(z, x1, x2, y1, y2):
     minr = 0
 
     j = 0
-    #90000 max(x2,y2)//len(z)
+
     kolic = 2**8 * exp(-0.02*len(z))
     k=(x2-x1)*(y2-y1)/4
     #k=4
@@ -87,7 +87,7 @@ def kulon2(z, x1, x2, y1, y2):
         j+=1
     global minrst
     minrst = minr
-    print(j, etal, minr)
+    print("kol:", j,"etal:", etal, "minr:", minr)
     return z
 
 n=100
@@ -95,20 +95,17 @@ z=[]
 
 x1 = 0
 y1 = 0
-x2 = 3000
-y2 = 3000
+x2 = 1000
+y2 = 1000
 
 z = tckRsp(n, x1, x2, y1, y2)
 
-etal = sqrt((x2 - x1)**2 + (y2 - y1)**2) / len(z)
-minrst = etal + 1
 
-#if (((x2-x1)*(y2-y1))/n)>30*n:
-#if  (n/((x2-x1)*(y2-y1)))>(1/(n*n*n)):
 #while minrst > etal:
-start=time.perf_counter()
+
 if n<=pow((x2-x1)*(y2-y1), 3/10):
     z = kulon2(z,x1,x2,y1,y2)
+
 #    n+=1
 #    z = tckRsp(n, x1, x2, y1, y2)
 #    etal = sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2) / len(z)
@@ -116,13 +113,24 @@ if n<=pow((x2-x1)*(y2-y1), 3/10):
 
 #for i in z: print(*i)
 
-#x = [i[0] for i in z]+[x1, x1, x2, x2]
-#y = [i[1] for i in z]+[y1, y2, y1, y2]
-#colors = [0.44784722]*len(z)+[0.45784723]*4
-#area = [100]*(len(z)+4)
-#plt.scatter(x, y, s=area, c=colors, alpha=0.5)
-#plt.show()
+x = [i[0] for i in z]+[x1, x1, x2, x2]
+y = [i[1] for i in z]+[y1, y2, y1, y2]
+colors = [0.44784722]*len(z)+[0.45784723]*4
+area = [100]*(len(z)+4)
+plt.scatter(x, y, s=area, c=colors, alpha=0.5)
+plt.show()
 
+etal = sqrt((x2 - x1)**2 + (y2 - y1)**2) / len(z)
+minrst = 100000000
+
+for g in range(len(z)):
+    for i in range(len(z)):
+        if (i != g):
+            rst = sqrt((z[g][0] - z[i][0]) ** 2 + (z[g][1] - z[i][1]) ** 2)
+            sumr += rst + abs(z[g][0] - x1) + abs(z[g][0] - x2) + abs(z[g][1] - y1) + abs(z[g][1] - y2)
+            minrst = min(minrst, rst, abs(z[g][0] - x1), abs(z[g][0] - x2), abs(z[g][1] - y1), abs(z[g][1] - y2))
+
+print("minr:", minrst, "etal:", etal, "sumR:", sumr)
 #print(len(z)-n, n)
 print(f"Запрос: {time.perf_counter()-start}")
 print(tracemalloc.get_traced_memory())
