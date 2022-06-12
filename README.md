@@ -20,9 +20,13 @@ GeoScan alternative exam project
 Выполнили Пестерев Викор 1306, Мальцев Артем 1308
 
 -- pogon.py - преследование цели
+
 -- tckDouble.py - распределение сеткой
+
 -- rsp.py - итоговое распределение 
+
 -- approx.xlsx - график аппроксимации зависимости количества дронов
+
 -- wolf.xlsx - график погони и распределения по площади
 
 Отчет о проделанной работе: https://docs.google.com/document/d/1M3-Wvx4OMujvpFXEpaZUo6TsFpELN1xg/edit?usp=sharing&ouid=100529390599218697980&rtpof=true&sd=true
