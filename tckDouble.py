@@ -14,12 +14,14 @@ def tckDouble(x1, x2, y1, y2, r, n):
 
     n = mindiv(x1, x2, y1, y2, r, n)
 
+    #обработка простейших случаев
     if(n in range(3)):
         match n:
             case 0: return []
             case 1: return [[x1+(x2-x1)/2, y1+(y2-y1)/2]]
             case 2: return [[x1+(x2-x1)/4,y1+(y2-y1)/4],[x2-(x2-x1)/4,y2-(y2-y1)/4]]
 
+    #подразделение границ площади на равные участки
     width = (abs(x2-x1)//r)
     heigh = (abs(y1-y2)//r)
     wi = (x2-x1)/width
@@ -28,14 +30,14 @@ def tckDouble(x1, x2, y1, y2, r, n):
     if((width+1)*(heigh+1)==n): flag = 1
 
     match flag:
-        #x*y
+        #x*y случай когда число дронов равно числу получившихся участков
         case 1:
             z.append([[x1, y1]])
             for i in range(width):
                 z[0].append([z[0][i][0]+wi, z[0][i][1]])
             for i in range(heigh):
                 z.append([[z[i][x][0], z[i][x][1]+he] for x in range(width+1)])
-        #cross
+        #cross сслучай с диагональным расположением
         case 0:
             z.append([[x1, y1]])
             for i in range(width):
@@ -51,6 +53,7 @@ def tckDouble(x1, x2, y1, y2, r, n):
     for i in z: out+=i
     return out
 
+#подсчет количества дронов, которые будут расположены
 def kol(x1, x2, y1, y2, r, n):
     z = []
     flag = 0
@@ -91,6 +94,7 @@ def kol(x1, x2, y1, y2, r, n):
             for i in z: out += i
             return len(out)
 
+#нахождение минимальной разницы между расположенными дронами и их фактическим количеством
 def mindiv(x1, x2, y1, y2, r, n):
     d = n-kol(x1, x2, y1, y2, r, n)
     if d ==0:   return n
@@ -102,15 +106,15 @@ def mindiv(x1, x2, y1, y2, r, n):
             k = i
     return k
 
+#число дронов
 n=200
 z=[]
 
+#координаты границ площади
 x1 = 0
 y1 = 0
 x2 = 300
 y2 = 400
-
-#190 край
 
 r = 1
 z = tckDouble(x1, x2, y1, y2, r, n)
